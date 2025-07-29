@@ -123,11 +123,29 @@
   <data name="DescricaoObrigatoria" xml:space="preserve">
     <value>Descrição é obrigatório.</value>
   </data>
+  <data name="EmailExistente" xml:space="preserve">
+    <value>Email já cadastrado</value>
+  </data>
+  <data name="EmailInvalido" xml:space="preserve">
+    <value>Email informado é inválido.</value>
+  </data>
+  <data name="EmailVazio" xml:space="preserve">
+    <value>Email é obrigatório.</value>
+  </data>
   <data name="ErroDesconhecido" xml:space="preserve">
     <value>Erro desconhecido.</value>
   </data>
   <data name="FaturamentoNaoEncontrado" xml:space="preserve">
     <value>Faturamento nao encontrado</value>
+  </data>
+  <data name="LoginOuSenhaInvalido" xml:space="preserve">
+    <value>Login e/ou Senha inválidos</value>
+  </data>
+  <data name="NomeVazio" xml:space="preserve">
+    <value>Nome é obrigatório.</value>
+  </data>
+  <data name="SenhaInvalida" xml:space="preserve">
+    <value>Sua senha deve ter no mínimo 8 caracteres, contendo pelo menos uma letra maiúscula, uma letra minúscula, um número e um caractere especial (por exemplo, !,?,*,.)</value>
   </data>
   <data name="TipoPagamentoInvalido" xml:space="preserve">
     <value>Tipo de pagamento inválido.</value>

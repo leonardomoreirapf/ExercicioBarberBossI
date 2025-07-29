@@ -79,6 +79,33 @@ namespace BarberBossI.Exception {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Email já cadastrado.
+        /// </summary>
+        public static string EmailExistente {
+            get {
+                return ResourceManager.GetString("EmailExistente", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Email informado é inválido..
+        /// </summary>
+        public static string EmailInvalido {
+            get {
+                return ResourceManager.GetString("EmailInvalido", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Email é obrigatório..
+        /// </summary>
+        public static string EmailVazio {
+            get {
+                return ResourceManager.GetString("EmailVazio", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Erro desconhecido..
         /// </summary>
         public static string ErroDesconhecido {
@@ -93,6 +120,33 @@ namespace BarberBossI.Exception {
         public static string FaturamentoNaoEncontrado {
             get {
                 return ResourceManager.GetString("FaturamentoNaoEncontrado", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Login e/ou Senha inválidos.
+        /// </summary>
+        public static string LoginOuSenhaInvalido {
+            get {
+                return ResourceManager.GetString("LoginOuSenhaInvalido", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Nome é obrigatório..
+        /// </summary>
+        public static string NomeVazio {
+            get {
+                return ResourceManager.GetString("NomeVazio", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sua senha deve ter no mínimo 8 caracteres, contendo pelo menos uma letra maiúscula, uma letra minúscula, um número e um caractere especial (por exemplo, !,?,*,.).
+        /// </summary>
+        public static string SenhaInvalida {
+            get {
+                return ResourceManager.GetString("SenhaInvalida", resourceCulture);
             }
         }
         
