@@ -7,5 +7,6 @@ internal class BarberBossDbContext : DbContext
 {
 	public BarberBossDbContext(DbContextOptions options) : base(options){}
 	public DbSet<Faturamento> Faturamentos { get; set; }
+	public DbSet<User> Usuarios { get; set; }
 
 }

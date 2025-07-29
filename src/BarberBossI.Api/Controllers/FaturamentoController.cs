@@ -5,12 +5,14 @@ using BarberBossI.Application.UseCases.Faturamento.Register;
 using BarberBossI.Application.UseCases.Faturamento.Update;
 using BarberBossI.Communication.Requests;
 using BarberBossI.Communication.Responses;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BarberBossI.Api.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
+[Authorize]
 public class FaturamentoController : ControllerBase
 {
 	[HttpPost]

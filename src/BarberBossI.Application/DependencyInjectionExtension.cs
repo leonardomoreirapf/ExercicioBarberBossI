@@ -6,6 +6,8 @@ using BarberBossI.Application.UseCases.Faturamento.Register;
 using BarberBossI.Application.UseCases.Faturamento.Reports.Excel;
 using BarberBossI.Application.UseCases.Faturamento.Reports.Pdf;
 using BarberBossI.Application.UseCases.Faturamento.Update;
+using BarberBossI.Application.UseCases.Login;
+using BarberBossI.Application.UseCases.User.Register;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace BarberBossI.Application;
@@ -32,5 +34,7 @@ public static class DependencyInjectionExtension
 		services.AddScoped<IUpdateFaturamentoUseCase, UpdateFaturamentoUseCase>();
 		services.AddScoped<IGenerateFaturamentoReportExcelUseCase, GenerateFaturamentoReportExcelUseCase>();
 		services.AddScoped<IGenerateFaturamentoReportPdfUseCase, GenerateFaturamentoReportPdfUseCase>();
+		services.AddScoped<IRegisterUserUseCase, RegisterUserUseCase>();
+		services.AddScoped<IDoLoginUseCase, DoLoginUseCase>();
 	}
 }

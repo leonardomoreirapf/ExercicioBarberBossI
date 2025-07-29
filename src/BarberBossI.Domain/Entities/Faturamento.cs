@@ -10,4 +10,6 @@ public class Faturamento
 	public TipoPagamento TipoPagamento { get; set; }
 	public decimal Valor { get; set; }
 	public string Descricao { get; set; } = string.Empty;
+	public long UserId { get; set; }
+	public User User { get; set; } = default!;
 }
