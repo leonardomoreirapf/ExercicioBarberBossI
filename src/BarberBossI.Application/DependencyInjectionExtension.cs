@@ -8,6 +8,7 @@ using BarberBossI.Application.UseCases.Faturamento.Reports.Pdf;
 using BarberBossI.Application.UseCases.Faturamento.Update;
 using BarberBossI.Application.UseCases.Login;
 using BarberBossI.Application.UseCases.User.ChangePassword;
+using BarberBossI.Application.UseCases.User.Delete;
 using BarberBossI.Application.UseCases.User.Profile;
 using BarberBossI.Application.UseCases.User.Register;
 using BarberBossI.Application.UseCases.User.Update;
@@ -42,5 +43,6 @@ public static class DependencyInjectionExtension
 		services.AddScoped<IGetUserProfileUseCase, GetUserProfileUseCase>();
 		services.AddScoped<IUpdateUserUseCase, UpdateUserUseCase>();
 		services.AddScoped<IChangePasswordUseCase, ChangePasswordUseCase>();
+		services.AddScoped<IDeleteUserAccountUseCase, DeleteUserAccountUseCase>();
 	}
 }
