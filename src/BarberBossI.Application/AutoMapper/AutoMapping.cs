@@ -24,5 +24,6 @@ public class AutoMapping : Profile
 		CreateMap<Faturamento, ResponseRegisteredFaturamentoJson>();
 		CreateMap<Faturamento, ResponseShortFaturamentoJson>();
 		CreateMap<Faturamento, ResponseFaturamentoJson>();
+		CreateMap<User, ResponseUserProfileJson>();
 	}
 }

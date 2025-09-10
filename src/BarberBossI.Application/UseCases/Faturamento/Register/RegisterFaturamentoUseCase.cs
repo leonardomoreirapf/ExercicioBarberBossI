@@ -3,6 +3,7 @@ using BarberBossI.Communication.Requests;
 using BarberBossI.Communication.Responses;
 using BarberBossI.Domain.Repositories;
 using BarberBossI.Domain.Repositories.Faturamentos;
+using BarberBossI.Domain.Services.LoggedUser;
 using BarberBossI.Exception.ExceptionsBase;
 
 namespace BarberBossI.Application.UseCases.Faturamento.Register;
@@ -12,22 +13,31 @@ public class RegisterFaturamentoUseCase : IRegisterFaturamentoUseCase
 	private readonly IFaturamentoWriteOnlyRepository _repository;
 	private readonly IUnitOfWork _unitOfWork;
 	private readonly IMapper _mapper;
-	public RegisterFaturamentoUseCase(IFaturamentoWriteOnlyRepository repository, IUnitOfWork unitOfWork, IMapper mapper)
+	private readonly ILoggedUser _loggedUser;
+	public RegisterFaturamentoUseCase(
+		IFaturamentoWriteOnlyRepository repository, 
+		IUnitOfWork unitOfWork, 
+		IMapper mapper,
+		ILoggedUser loggedUser)
 	{
 		_repository = repository;
 		_unitOfWork = unitOfWork;
 		_mapper = mapper;
+		_loggedUser = loggedUser;
 	}
 	public async Task<ResponseRegisteredFaturamentoJson> Execute(RequestFaturamentoJson request)
 	{
 		Validate(request);
 
-		var entity = _mapper.Map<Domain.Entities.Faturamento>(request);
+		var loggedUser = await _loggedUser.Get();
 
-		await _repository.Add(entity);
+		var faturamento = _mapper.Map<Domain.Entities.Faturamento>(request);
+		faturamento.UserId = loggedUser.Id;
+
+		await _repository.Add(faturamento);
 		await _unitOfWork.Commit();
 
-		return _mapper.Map<ResponseRegisteredFaturamentoJson>(entity);
+		return _mapper.Map<ResponseRegisteredFaturamentoJson>(faturamento);
 	}
 	private void Validate(RequestFaturamentoJson request)
 	{

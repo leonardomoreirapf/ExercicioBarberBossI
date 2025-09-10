@@ -1,6 +1,7 @@
 ﻿using BarberBossI.Domain.Enums;
 using BarberBossI.Domain.Extensions;
 using BarberBossI.Domain.Repositories.Faturamentos;
+using BarberBossI.Domain.Services.LoggedUser;
 using ClosedXML.Excel;
 
 namespace BarberBossI.Application.UseCases.Faturamento.Reports.Excel;
@@ -9,20 +10,27 @@ public class GenerateFaturamentoReportExcelUseCase : IGenerateFaturamentoReportE
 {
 	private const string CURRENCY_SYMBOL = "R$";
 	private IFaturamentoReadOnlyRepository _repository;
-	public GenerateFaturamentoReportExcelUseCase(IFaturamentoReadOnlyRepository repository)
+	private readonly ILoggedUser _loggedUser;
+
+	public GenerateFaturamentoReportExcelUseCase(
+		IFaturamentoReadOnlyRepository repository,
+		ILoggedUser loggedUser)
 	{
 		_repository = repository;
+		_loggedUser = loggedUser;
 	}
 	public async Task<byte[]> Execute(DateOnly month)
 	{
-		var faturamentos = await _repository.FilterByMonth(month);
+		var loggedUser = await _loggedUser.Get();
+
+		var faturamentos = await _repository.FilterByMonth(loggedUser, month);
 
 		if (faturamentos.Count.Equals(0))
 			return [];
 
 		using var workbook = new XLWorkbook();
 
-		workbook.Author = "Leonardo Moreira";
+		workbook.Author = loggedUser.Name;
 		workbook.Style.Font.FontSize = 12;
 		workbook.Style.Font.FontName = "Times New Roman";
 

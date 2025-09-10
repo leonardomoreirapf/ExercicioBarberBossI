@@ -2,6 +2,7 @@
 using BarberBossI.Communication.Requests;
 using BarberBossI.Domain.Repositories;
 using BarberBossI.Domain.Repositories.Faturamentos;
+using BarberBossI.Domain.Services.LoggedUser;
 using BarberBossI.Exception;
 using BarberBossI.Exception.ExceptionsBase;
 
@@ -12,17 +13,27 @@ public class UpdateFaturamentoUseCase : IUpdateFaturamentoUseCase
 	private readonly IMapper _mapper;
 	private readonly IUnitOfWork _unitOfWork;
 	private readonly IFaturamentoUpdateOnlyRepository _repository;
-	public UpdateFaturamentoUseCase(IMapper mapper, IUnitOfWork unitOfWork, IFaturamentoUpdateOnlyRepository repository)
+	private readonly ILoggedUser _loggedUser;
+
+	public UpdateFaturamentoUseCase(
+		IMapper mapper, 
+		IUnitOfWork unitOfWork, 
+		IFaturamentoUpdateOnlyRepository repository,
+		ILoggedUser loggedUser)
 	{
 		_mapper = mapper;
 		_unitOfWork = unitOfWork;
 		_repository = repository;
+		_loggedUser = loggedUser;
+
 	}
 	public async Task Execute(long id, RequestFaturamentoJson request)
 	{
 		Validate(request);
 
-		var faturamento = await _repository.GetById(id);
+		var loggedUser = await _loggedUser.Get();
+
+		var faturamento = await _repository.GetById(loggedUser.Id, id);
 
 		if (faturamento is null)
 			throw new NotFoundException(ResourceErrorMessage.FaturamentoNaoEncontrado);

@@ -4,7 +4,7 @@ namespace BarberBossI.Domain.Repositories.Faturamentos;
 
 public interface IFaturamentoReadOnlyRepository
 {
-	Task<List<Faturamento>> GetAll();
-	Task<Faturamento?> GetById(long id);
-	Task<List<Faturamento>> FilterByMonth(DateOnly date);
+	Task<List<Faturamento>> GetAll(Entities.User user);
+	Task<Faturamento?> GetById(Entities.User user, long id);
+	Task<List<Faturamento>> FilterByMonth(Entities.User user, DateOnly date);
 }

@@ -1,6 +1,9 @@
 using BarberBossI.Api.Filters;
+using BarberBossI.Api.Token;
 using BarberBossI.Application;
+using BarberBossI.Domain.Security.Tokens;
 using BarberBossI.Infrastructure;
+using BarberBossI.Infrastructure.Extensions;
 using BarberBossI.Infrastructure.Migrations;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
@@ -48,6 +51,10 @@ builder.Services.AddMvc(options => options.Filters.Add(typeof(ExceptionFilter)))
 builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddApplication();
 
+
+builder.Services.AddScoped<ITokenProvider, HttpContextTokenValue>();
+builder.Services.AddHttpContextAccessor();
+
 var signingKey = builder.Configuration.GetValue<string>("Settings:Jwt:SigninKey");
 
 builder.Services.AddAuthentication(config => 
@@ -80,7 +87,8 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-await MigrateDatabase();
+if (!builder.Configuration.IsTestEnvironment())
+    await MigrateDatabase();
 
 app.Run();
 
@@ -89,3 +97,5 @@ async Task MigrateDatabase()
     await using var scope = app.Services.CreateAsyncScope();
     await DataBaseMigration.MigrateDataBase(scope.ServiceProvider);
 }
+
+public partial class Program { }

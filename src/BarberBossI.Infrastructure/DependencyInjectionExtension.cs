@@ -3,9 +3,12 @@ using BarberBossI.Domain.Repositories.Faturamentos;
 using BarberBossI.Domain.Repositories.User;
 using BarberBossI.Domain.Security.Cryptography;
 using BarberBossI.Domain.Security.Tokens;
+using BarberBossI.Domain.Services.LoggedUser;
 using BarberBossI.Infrastructure.DataAccess;
 using BarberBossI.Infrastructure.DataAccess.Repositories;
+using BarberBossI.Infrastructure.Extensions;
 using BarberBossI.Infrastructure.Security.Tokens;
+using BarberBossI.Infrastructure.Services.LoggedUser;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -16,11 +19,12 @@ public static class DependencyInjectionExtension
 {
 	public static void AddInfrastructure(this IServiceCollection services, IConfiguration configuration) 
 	{
-		AddDbContext(services, configuration);
+		services.AddScoped<IPasswordEncripter, Security.Cryptography.BCrypt>();
 		AddToken(services, configuration);
 		AddRepositories(services);
 
-		services.AddScoped<IPasswordEncripter, Security.Cryptography.BCrypt>();
+		if (!configuration.IsTestEnvironment())
+			AddDbContext(services, configuration);
 		
 	}
 
@@ -40,12 +44,14 @@ public static class DependencyInjectionExtension
 		services.AddScoped<IFaturamentoUpdateOnlyRepository, FaturamentoRepository>();
 		services.AddScoped<IUserReadOnlyRepository, UserRepository>();
 		services.AddScoped<IUserWriteOnlyRepository, UserRepository>();
+		services.AddScoped<IUserUpdateOnlyRepository, UserRepository>();
+		services.AddScoped<ILoggedUser, LoggedUser>();
 	}
 
 	private static void AddDbContext(IServiceCollection services, IConfiguration configuration)
 	{
 		var connectionString = configuration.GetConnectionString("Connection");
-		var serverVersion = new MySqlServerVersion(new Version(8, 0, 26));
+		var serverVersion = ServerVersion.AutoDetect(connectionString);
 
 		services.AddDbContext<BarberBossDbContext>(config => config.UseMySql(connectionString: connectionString, serverVersion: serverVersion));
 	}

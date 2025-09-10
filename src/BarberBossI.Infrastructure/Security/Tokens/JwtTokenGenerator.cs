@@ -39,7 +39,8 @@ public class JwtTokenGenerator : IAccessTokenGenerator
 		return new List<Claim>
 		{
 			new Claim(ClaimTypes.Name, user.Name),
-			new Claim(ClaimTypes.Sid, user.UserIndentifier.ToString())
+			new Claim(ClaimTypes.Sid, user.UserIndentifier.ToString()),
+			new Claim(ClaimTypes.Role, user.Role)
 		};
 	}
 

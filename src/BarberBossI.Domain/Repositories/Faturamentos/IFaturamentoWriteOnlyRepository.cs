@@ -5,5 +5,5 @@ namespace BarberBossI.Domain.Repositories.Faturamentos;
 public interface IFaturamentoWriteOnlyRepository
 {
 	Task Add(Faturamento faturamento);
-	Task<bool> Delete(long id);
+	Task Delete(long id);
 }

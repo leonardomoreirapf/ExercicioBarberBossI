@@ -3,6 +3,7 @@ using BarberBossI.Application.UseCases.Faturamento.Reports.Pdf.Colors;
 using BarberBossI.Application.UseCases.Faturamento.Reports.Pdf.Fonts;
 using BarberBossI.Domain.Extensions;
 using BarberBossI.Domain.Repositories.Faturamentos;
+using BarberBossI.Domain.Services.LoggedUser;
 using MigraDoc.DocumentObjectModel;
 using MigraDoc.DocumentObjectModel.Tables;
 using MigraDoc.Rendering;
@@ -15,21 +16,27 @@ public class GenerateFaturamentoReportPdfUseCase : IGenerateFaturamentoReportPdf
 {
 	private const int HEIGHT_ROW_DEFAULT_TABLE = 25;
 	private readonly IFaturamentoReadOnlyRepository _repository;
+	private readonly ILoggedUser _loggedUser;
 
-	public GenerateFaturamentoReportPdfUseCase(IFaturamentoReadOnlyRepository repository)
+	public GenerateFaturamentoReportPdfUseCase(
+		IFaturamentoReadOnlyRepository repository,
+		ILoggedUser loggedUser)
 	{
 		_repository = repository;
+		_loggedUser = loggedUser;
 
 		GlobalFontSettings.FontResolver = new FaturamentoReportFontResolver();
 	}
 	public async Task<byte[]> Execute(DateOnly month)
 	{
-		var faturamentos = await _repository.FilterByMonth(month);
+		var loggedUser = await _loggedUser.Get();
+
+		var faturamentos = await _repository.FilterByMonth(loggedUser, month);
 
 		if (faturamentos.Count.Equals(0))
 			return [];
 
-		var document = CreateDocument(month);
+		var document = CreateDocument(loggedUser.Name, month);
 		var page = CreatePage(document);
 
 		CreateHeaderWithProfilePhoto(page);
@@ -130,12 +137,12 @@ public class GenerateFaturamentoReportPdfUseCase : IGenerateFaturamentoReportPdf
 		row.Cells[1].Format.LeftIndent = 18;
 	}
 
-	private Document CreateDocument(DateOnly month)
+	private Document CreateDocument(string author, DateOnly month)
 	{
 		var document = new Document();
 
 		document.Info.Title = $"Despesas de {month:Y}";
-		document.Info.Author = "Leonardo Moreira";
+		document.Info.Author = author;
 
 		var style = document.Styles["Normal"];
 		style!.Font.Name = FontHelper.ROBOTO_REGULAR;

@@ -1,5 +1,7 @@
 ﻿using BarberBossI.Application.UseCases.Faturamento.Reports.Excel;
 using BarberBossI.Application.UseCases.Faturamento.Reports.Pdf;
+using BarberBossI.Domain.Enums;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Net.Mime;
 
@@ -7,6 +9,7 @@ namespace BarberBossI.Api.Controllers
 {
 	[Route("api/[controller]")]
 	[ApiController]
+	[Authorize(Roles = Roles.Admin)]
 	public class ReportController : ControllerBase
 	{
 		[HttpGet("excel")]
@@ -14,7 +17,7 @@ namespace BarberBossI.Api.Controllers
 		[ProducesResponseType(StatusCodes.Status404NotFound)]
 		public async Task<ActionResult> GetExcel(
 			[FromServices] IGenerateFaturamentoReportExcelUseCase useCase,
-			[FromHeader] DateOnly month)
+			[FromQuery] DateOnly month)
 		{
 			var file = await useCase.Execute(month);
 

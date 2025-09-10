@@ -17,19 +17,15 @@ internal class FaturamentoRepository : IFaturamentoReadOnlyRepository, IFaturame
 	}
 
 
-	public async Task<List<Faturamento>> GetAll() => await _dbContext.Faturamentos.AsNoTracking().ToListAsync();
-	async Task<Faturamento?> IFaturamentoReadOnlyRepository.GetById(long id) => await _dbContext.Faturamentos.AsNoTracking().FirstOrDefaultAsync(faturamento => faturamento.Id.Equals(id));
-	async Task<Faturamento?> IFaturamentoUpdateOnlyRepository.GetById(long id) => await _dbContext.Faturamentos.FirstOrDefaultAsync(faturamento => faturamento.Id.Equals(id));
-	public async Task<bool> Delete(long id)
+	public async Task<List<Faturamento>> GetAll(User user) => await _dbContext.Faturamentos.AsNoTracking().Where(faturamento => faturamento.UserId.Equals(user.Id)).ToListAsync();
+	async Task<Faturamento?> IFaturamentoReadOnlyRepository.GetById(User user, long id) => await _dbContext.Faturamentos.AsNoTracking().FirstOrDefaultAsync(faturamento => faturamento.Id.Equals(id) && faturamento.UserId.Equals(user.Id));
+	async Task<Faturamento?> IFaturamentoUpdateOnlyRepository.GetById(long userId, long id) => await _dbContext.Faturamentos.FirstOrDefaultAsync(faturamento => faturamento.Id.Equals(id) && faturamento.UserId.Equals(userId));
+	public async Task Delete(long id)
 	{
-		var result = await _dbContext.Faturamentos.FirstOrDefaultAsync(faturamento => faturamento.Id.Equals(id));
+		var result = await _dbContext.Faturamentos.FindAsync(id);
 
-		if (result is null)
-			return false;
 
-		_dbContext.Faturamentos.Remove(result);
-
-		return true;
+		_dbContext.Faturamentos.Remove(result!);
 	}
 
 	public void Update(Faturamento faturamento)
@@ -37,7 +33,7 @@ internal class FaturamentoRepository : IFaturamentoReadOnlyRepository, IFaturame
 		_dbContext.Faturamentos.Update(faturamento);
 	}
 
-	public async Task<List<Faturamento>> FilterByMonth(DateOnly date)
+	public async Task<List<Faturamento>> FilterByMonth(User user, DateOnly date)
 	{
 		var startDate = new DateTime(year: date.Year, month: date.Month, day: 1).Date;
 
@@ -47,7 +43,7 @@ internal class FaturamentoRepository : IFaturamentoReadOnlyRepository, IFaturame
 		return await _dbContext.
 					  Faturamentos.
 					  AsNoTracking().
-					  Where(faturamento => faturamento.Data >= startDate && faturamento.Data <= endDate).
+					  Where(faturamento => faturamento.UserId.Equals(user.Id) && faturamento.Data >= startDate && faturamento.Data <= endDate).
 					  OrderBy(faturamento => faturamento.Data).
 					  ThenBy(faturamento => faturamento.Titulo).
 					  ToListAsync();

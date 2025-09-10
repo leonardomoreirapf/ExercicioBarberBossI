@@ -142,6 +142,15 @@ namespace BarberBossI.Exception {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to A senha inserida e diferente da atual.
+        /// </summary>
+        public static string SenhaDiferenteDaAtual {
+            get {
+                return ResourceManager.GetString("SenhaDiferenteDaAtual", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Sua senha deve ter no mínimo 8 caracteres, contendo pelo menos uma letra maiúscula, uma letra minúscula, um número e um caractere especial (por exemplo, !,?,*,.).
         /// </summary>
         public static string SenhaInvalida {

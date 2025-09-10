@@ -144,6 +144,9 @@
   <data name="NomeVazio" xml:space="preserve">
     <value>Nome é obrigatório.</value>
   </data>
+  <data name="SenhaDiferenteDaAtual" xml:space="preserve">
+    <value>A senha inserida e diferente da atual</value>
+  </data>
   <data name="SenhaInvalida" xml:space="preserve">
     <value>Sua senha deve ter no mínimo 8 caracteres, contendo pelo menos uma letra maiúscula, uma letra minúscula, um número e um caractere especial (por exemplo, !,?,*,.)</value>
   </data>

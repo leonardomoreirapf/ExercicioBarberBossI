@@ -47,7 +47,7 @@ public class PasswordValidator<T> : PropertyValidator<T, string>
 			return false;
 		}
 
-		if (!Regex.IsMatch(password, @"[\!\?\*\.]+"))
+		if (!Regex.IsMatch(password, @"[\!\?\*\.\@]+"))
 		{
 			context.MessageFormatter.AppendArgument(ErrorMessageKey, ResourceErrorMessage.SenhaInvalida);
 			return false;
